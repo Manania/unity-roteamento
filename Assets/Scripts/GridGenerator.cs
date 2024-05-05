@@ -24,8 +24,8 @@ public class GridGenerator
     // Gera a grid
     public List<Node> GenerateGrid()
     {
-        float startX = grid.transform.position.x - (cols / 2);
-        float startY = grid.transform.position.y - (rows / 2);
+        float startX = grid.transform.position.x;
+        float startY = grid.transform.position.y;
 
         for (int i = 0; i < rows; i++)
         {

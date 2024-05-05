@@ -124,7 +124,6 @@ public class AStar
                 path.Add(current.node);
                 current = nodeRecords[current.connection];
             }
-            path.Reverse();
             return path;
         }
         return null;
