@@ -108,7 +108,7 @@ public class AStar
                     open.Add(endNodeRecord);
                 }
             }
-
+            currentRecord.node.visited = true;
             // Move o nó atual da lista aberta para a fechada
             open.Remove(currentRecord);
             closed.Add(currentRecord);

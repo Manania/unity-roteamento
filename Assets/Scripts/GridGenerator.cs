@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GridGenerator
@@ -39,65 +40,32 @@ public class GridGenerator
                 var isObstacle = Random.Range(0, 100) < obstaclesPercentage;
                 if (isObstacle)
                 {
-                    square.GetComponent<SpriteRenderer>().color = Color.black;
-                    square.transform.tag = "Obstacle";
+                    var tile = squareNode.gameObject.GetComponent<Tile>();
+                    var cubeSize = 10f;
+                    tile.transform.localScale = new Vector3(square.transform.localScale.x, cubeSize, square.transform.localScale.x);
+                    Node.ChangeColor(squareNode, Color.black);
+                    //square.transform.tag = "Obstacle";
                     squareNode.isObstacle = true;
                 }
                 squares.Add(squareNode);
             }
         }
 
-        // Adiciona os vizinhos de cada quadrado
-        foreach (var square in squares)
+        for (var i = 0; i < squares.Count; i++)
         {
-            var x = square.gridPosition.x;
-            var y = square.gridPosition.y;
-
-            if (x > 0)
+            var node1 = squares[i];
+            var textObject = node1.gameObject.GetComponentInChildren<TextMeshPro>();
+            textObject.text = node1.gridPosition.x + "," + node1.gridPosition.y;
+            for (var j = i + 1; j < squares.Count; j++)
             {
-                square.AddNeighbor(GetNodeAtPosition(x - 1, y));
-            }
-            if (x < cols - 1)
-            {
-                square.AddNeighbor(GetNodeAtPosition(x + 1, y));
-            }
-            if (y > 0)
-            {
-                square.AddNeighbor(GetNodeAtPosition(x, y - 1));
-            }
-            if (y < rows - 1)
-            {
-                square.AddNeighbor(GetNodeAtPosition(x, y + 1));
+                var node2 = squares[j];
+                if ((node2.gridPosition - node1.gridPosition).magnitude == 1)
+                {
+                    node1.AddNeighbor(node2);
+                    node2.AddNeighbor(node1);
+                }
             }
         }
-
-
         return squares;
-    }
-
-    private Node GetNodeAtPosition(float x, float y)
-    {
-        // Aqui estamos assumindo que cada GameObject tem um componente Node anexado
-        return squares.Find(n => n.gridPosition.x == x && n.gridPosition.y == y);
-    }
-
-    // Muda a cor de um quadrado posteriormente
-    public void ChangeSquareColor(int index, Color color, List<Node> objects)
-    {
-        if (index >= 0 && index < objects.Count)
-        {
-            objects[index].GetComponent<SpriteRenderer>().color = color;
-        }
-    }
-
-    public void ClearGrid()
-    {
-        foreach (Node square in squares)
-        {
-            if (!square.isObstacle)
-            {
-                square.GetComponent<SpriteRenderer>().color = Color.white;
-            }
-        }
     }
 }

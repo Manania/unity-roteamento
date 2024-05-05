@@ -30,4 +30,9 @@ public class Node : MonoBehaviour
         var pos = gameObject.transform.position;
         this.gridPosition = new Vector2Int((int)pos.x, (int)pos.z);
     }
+
+    public static void ChangeColor(Node node, Color color)
+    {
+        node.gameObject.transform.GetChild(0).GetComponent<Renderer>().material.color = color;
+    }
 }
